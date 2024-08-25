@@ -5,6 +5,8 @@ import { DirectoresModule } from './directores/directores.module';
 import { PeoresPeliculasModule } from './peores-peliculas/peores-peliculas.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { Director } from './directores/entities/directore.entity';
+import { PeoresPelicula } from './peores-peliculas/entities/peores-pelicula.entity';
 
 @Module({
   imports: [ ConfigModule.forRoot({ isGlobal: true}),
@@ -16,6 +18,7 @@ import { AppService } from './app.service';
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
+      entities: [Director, PeoresPelicula]
       
     }),
     DirectoresModule,PeoresPeliculasModule],

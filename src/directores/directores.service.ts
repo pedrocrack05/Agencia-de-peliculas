@@ -23,7 +23,7 @@ export class DirectoresService {
   async findOne(id: number): Promise<Director> {
     const director = await this.directorRepository.findOneBy({ id });
     if (!director) {
-      throw new NotFoundException(`Director with ID ${id} not found`);
+      throw new NotFoundException(`Director con ID ${id} no encontrado`);
     }
     return director;
   }
@@ -32,7 +32,7 @@ export class DirectoresService {
     await this.directorRepository.update(id, updateDirectorDto);
     const updatedDirector = await this.directorRepository.findOneBy({ id });
     if (!updatedDirector) {
-      throw new NotFoundException(`Director with ID ${id} not found`);
+      throw new NotFoundException(`Director con ID ${id} no encontrado`);
     }
     return updatedDirector;
   }
@@ -40,7 +40,7 @@ export class DirectoresService {
   async remove(id: number): Promise<void> {
     const result = await this.directorRepository.delete(id);
     if (result.affected === 0) {
-      throw new NotFoundException(`Director with ID ${id} not found`);
+      throw new NotFoundException(`Director con ID ${id} no encontrado`);
     }
   }
 }

@@ -15,7 +15,6 @@ export class CreatePeoresPeliculaDto {
   @IsString()
   readonly descripcion: string;
 
-  // Considera añadir un campo para `director_id` si lo necesitas para crear una película.
   @IsInt()
   readonly directorId: number;
 }

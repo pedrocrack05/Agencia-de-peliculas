@@ -10,10 +10,24 @@ export class PeoresPeliculasService {
   constructor(
     @InjectRepository(PeoresPelicula)
     private peliculaRepository: Repository<PeoresPelicula>,
+
+    @InjectRepository(Director)  
+    private directorRepository: Repository<Director>
   ) {}
 
   async create(createPeoresPeliculaDto: CreatePeoresPeliculaDto): Promise<PeoresPelicula> {
-    const pelicula = this.peliculaRepository.create(createPeoresPeliculaDto);
+    const director = await this.directorRepository.findOneBy({ id: createPeoresPeliculaDto.directorId });
+    
+    if (!director) {
+      throw new NotFoundException(`Director with ID ${createPeoresPeliculaDto.directorId} not found`);
+    }
+
+    // Crear la película
+    const pelicula = this.peliculaRepository.create({
+      ...createPeoresPeliculaDto,
+      director: director,  // Aquí se asigna el director encontrado
+    });
+
     return this.peliculaRepository.save(pelicula);
   }
 
@@ -24,7 +38,7 @@ export class PeoresPeliculasService {
   async findOne(id: number): Promise<PeoresPelicula> {
     const pelicula = await this.peliculaRepository.findOneBy({ id });
     if (!pelicula) {
-      throw new NotFoundException(`Pelicula with ID ${id} not found`);
+      throw new NotFoundException(`Pelicula con ID ${id} no encontrada`);
     }
     return pelicula;
   }
@@ -33,7 +47,7 @@ export class PeoresPeliculasService {
     await this.peliculaRepository.update(id, updatePeoresPeliculaDto);
     const updatedPelicula = await this.peliculaRepository.findOneBy({ id });
     if (!updatedPelicula) {
-      throw new NotFoundException(`Pelicula with ID ${id} not found`);
+      throw new NotFoundException(`Pelicula con ID ${id} no encontrada`);
     }
     return updatedPelicula;
   }
@@ -41,7 +55,7 @@ export class PeoresPeliculasService {
   async remove(id: number): Promise<void> {
     const result = await this.peliculaRepository.delete(id);
     if (result.affected === 0) {
-      throw new NotFoundException(`Pelicula with ID ${id} not found`);
+      throw new NotFoundException(`Pelicula con ID ${id} no encontrada`);
     }
   }
 
